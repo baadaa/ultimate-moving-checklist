@@ -1,0 +1,24 @@
+{
+  "short_name": "My Fridge",
+  "name": "My Fridge",
+  "icons": [{
+      "src": "favicon.ico",
+      "sizes": "64x64 32x32 24x24 16x16",
+      "type": "image/x-icon"
+    },
+    {
+      "src": "app-icon.png",
+      "type": "image/png",
+      "sizes": "120x120"
+    },
+    {
+      "src": "tile.png",
+      "type": "image/png",
+      "sizes": "558x558"
+    }
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#000000",
+  "background_color": "#ffffff"
+}

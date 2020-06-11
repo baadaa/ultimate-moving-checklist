@@ -1,0 +1,31 @@
+@import "normalize.scss";
+// @import url("https://fonts.googleapis.com/css?family=Merriweather:300,300i&display=swap");
+@import url("https://use.typekit.net/mbu7cxr.css");
+
+html,
+body {
+  // min-height: 100vh;
+  padding: 0;
+  margin: 0;
+  position: relative;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#root {
+  font-family: "ars-maquette-web", Helvetica, Arial, sans-serif;
+  font-weight: 200;
+  min-height: 100vh;
+  padding-top: 120px;
+  color: #222;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  @media screen and (max-width: 500px) {
+    padding-top: 70px;
+  }
+}
+
+.noscroll {
+  overflow: hidden;
+}
