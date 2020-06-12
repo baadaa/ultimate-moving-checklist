@@ -8,6 +8,7 @@ class App extends React.Component {
   state = {
     currentSection: "weekly",
     currentWeek: -8,
+    currentCategory: "Category 1",
     settingIsOpen: false,
     completedTaskIsHidden: false,
     moveDate: "",
@@ -26,15 +27,43 @@ class App extends React.Component {
     const currentlyOpen = this.state.settingIsOpen;
     this.setState({ settingIsOpen: !currentlyOpen });
   };
-  todoCompleteHandler = i => {
-    const todos = this.state.todos;
-    todos[i].done = !todos[i].done;
+  todoCompleteHandler = id => {
+    const todos = this.state.todos.map(todo => {
+      if (todo.id !== id) {
+        return todo;
+      }
+      return { ...todo, done: !todo.done };
+    });
     this.setState({ todos });
+  };
+  weekChangeHandler = direction => {
+    const weeks = [-8, -6, -4, -2, -1, 0, 1];
+    if (direction === "-" && this.state.currentWeek !== -8) {
+      const currentIndex = weeks.indexOf(this.state.currentWeek);
+      const newIndex = currentIndex - 1;
+      this.setState({ currentWeek: weeks[newIndex] });
+    }
+    if (direction === "+" && this.state.currentWeek !== 1) {
+      const currentIndex = weeks.indexOf(this.state.currentWeek);
+      const newIndex = currentIndex + 1;
+      this.setState({ currentWeek: weeks[newIndex] });
+    }
+  };
+  categoryChangeHandler = target => {
+    this.setState({ currentCategory: target });
   };
   completedTaskVisibilityHandler = () => {
     const currentVisibility = this.state.completedTaskIsHidden;
     this.setState({ completedTaskIsHidden: !currentVisibility });
   };
+  categoryList = [
+    "Category 1",
+    "Category 2",
+    "Category 3",
+    "Category 4",
+    "Category 5",
+    "Category 6"
+  ];
   render = () => (
     <>
       <Header
@@ -47,8 +76,12 @@ class App extends React.Component {
       <TodoArea
         currentSection={this.state.currentSection}
         currentWeek={this.state.currentWeek}
+        currentCategory={this.state.currentCategory}
+        categoryList={this.categoryList}
         todos={this.state.todos}
         todoCompleteHandler={this.todoCompleteHandler}
+        weekChangeHandler={this.weekChangeHandler}
+        categoryChangeHandler={this.categoryChangeHandler}
         completedTaskIsHidden={this.state.completedTaskIsHidden}
         completedTaskVisibilityHandler={this.completedTaskVisibilityHandler}
       />

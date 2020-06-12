@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import colors from "../UIElements/colors";
 import { ReactComponent as EmptyList } from "../../img/empty-list.svg";
+import { RightArrow, LeftArrow, DownArrow } from "../UIElements/arrows";
 
 const TodoAreaContainer = styled.div`
   width: 100%;
@@ -32,8 +33,8 @@ const TodoAreaContainer = styled.div`
   .viewContext {
     display: flex;
     height: ${props => (props.currentSection === "personal" ? "0" : "40px")};
-    overflow: hidden;
     align-items: center;
+    position: relative;
     font-size: 14px;
     font-weight: 800;
     transition: background-color 0.2s, height 0.2s, color 0.2s;
@@ -41,6 +42,47 @@ const TodoAreaContainer = styled.div`
       props.currentSection === "personal" ? "transparent" : "#fff"};
     background-color: ${props =>
       props.currentSection === "weekly" ? colors.navy : colors.blue};
+  }
+  .categoryList {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    background: ${colors.blue};
+    margin: 0;
+    padding: 0;
+    z-index: 900;
+    transition: transform 0.2s, opacity 0.2s;
+    display: ${props =>
+      props.currentSection === "category" ? "block" : "none"};
+    transform: ${props =>
+      props.dropdownIsOpen ? "translateY(40px)" : "translateY(10px)"};
+    opacity: ${props => (props.dropdownIsOpen ? 1 : 0)};
+    box-shadow: 0 7px 10px rgba(0, 0, 0, 0.3);
+    pointer-events: ${props => (props.dropdownIsOpen ? "all" : "none")};
+    li {
+      padding: 7px 15px;
+      font-weight: 200;
+    }
+  }
+  .weekChanger {
+    display: ${props => (props.currentSection === "weekly" ? "block" : "none")};
+    button {
+      cursor: pointer;
+    }
+    button:first-of-type {
+      opacity: ${props => (props.currentWeek === -8 ? 0.5 : 1)};
+    }
+    button:last-of-type {
+      opacity: ${props => (props.currentWeek === 1 ? 0.5 : 1)};
+    }
+  }
+  .categoryChanger {
+    transition: transform 0.2s;
+    display: ${props =>
+      props.currentSection === "category" ? "block" : "none"};
+    transform: ${props =>
+      props.dropdownIsOpen ? "rotate(180deg)" : "rotate(0deg)"};
   }
   .toggler {
     display: flex;
@@ -181,24 +223,41 @@ const TodoAreaContainer = styled.div`
 
 const TodoArea = ({
   currentSection,
+  currentWeek,
+  currentCategory,
+  categoryList,
   todos,
   todoCompleteHandler,
+  weekChangeHandler,
+  categoryChangeHandler,
   completedTaskIsHidden,
   completedTaskVisibilityHandler
 }) => {
-  const getTodoList = todos => {
-    const List = todos.map((todo, i) => {
+  const [dropdownIsOpen, setDropdownIsOpen] = useState(false);
+  const getTodoList = () => {
+    let todosInCurrentSelection;
+    if (currentSection === "weekly") {
+      todosInCurrentSelection = todos.filter(todo => todo.week === currentWeek);
+    } else if (currentSection === "personal") {
+      todosInCurrentSelection = todos.filter(todo => todo.personal === true);
+    } else {
+      todosInCurrentSelection = todos.filter(
+        todo => todo.category === currentCategory
+      );
+    }
+
+    const List = todosInCurrentSelection.map((todo, i) => {
       if (todo.done && completedTaskIsHidden) return null;
       return (
-        <li className={todo.done ? "done" : null} key={i}>
+        <li className={todo.done ? "done" : null} key={todo.id}>
           <input
             type="checkbox"
             checked={todo.done}
-            name={"todo" + i}
-            id={"todo" + i}
-            onChange={() => todoCompleteHandler(i)}
+            name={"todo" + todo.id}
+            id={"todo" + todo.id}
+            onChange={() => todoCompleteHandler(todo.id)}
           />
-          <label htmlFor={"todo" + i}>
+          <label htmlFor={"todo" + todo.id}>
             <span className="circle"></span>
             {todo.content}
           </label>
@@ -214,11 +273,68 @@ const TodoArea = ({
       );
     return <ul className="todos">{List}</ul>;
   };
-
+  const getCurrentSelectionLabel = () => {
+    let label;
+    if (currentSection === "weekly") {
+      switch (currentWeek) {
+        case -8:
+        case -6:
+        case -4:
+        case -2:
+          label = `${Math.abs(currentWeek)} weeks before move`;
+          break;
+        case -1:
+          label = "Moving week";
+          break;
+        case 0:
+          label = "Moving day";
+          break;
+        case 1:
+          label = "Week 1 post-move";
+          break;
+        default:
+          label = `${currentWeek} weeks before move`;
+          break;
+      }
+      return label;
+    }
+    return `${currentCategory}`;
+  };
+  const categoryChange = e => {
+    const targetCategory = e.target.dataset.category;
+    setDropdownIsOpen(false);
+    categoryChangeHandler(targetCategory);
+  };
   return (
-    <TodoAreaContainer currentSection={currentSection}>
+    <TodoAreaContainer
+      currentSection={currentSection}
+      currentWeek={currentWeek}
+      dropdownIsOpen={dropdownIsOpen}
+    >
       <div className="viewContext">
-        <div className="wrapper">8 weeks before move</div>
+        <div
+          className="wrapper"
+          style={{ display: "flex", justifyContent: "space-between" }}
+        >
+          {getCurrentSelectionLabel()}
+          <span className="weekChanger">
+            <LeftArrow click={weekChangeHandler} />{" "}
+            <RightArrow click={weekChangeHandler} />
+          </span>
+          <span className="categoryChanger">
+            <DownArrow
+              click={() => setDropdownIsOpen(!dropdownIsOpen)}
+              categoryList={categoryList}
+            />
+          </span>
+        </div>
+        <ul className="categoryList">
+          {categoryList.map((category, i) => (
+            <li key={i} data-category={category} onClick={categoryChange}>
+              {category}
+            </li>
+          ))}
+        </ul>
       </div>
       <div className="wrapper toggler">
         <div className="toggleDone">
@@ -238,7 +354,7 @@ const TodoArea = ({
         </div>
         <button>
           <svg width="14" height="14" xmlns="http://www.w3.org/2000/svg">
-            <g fill="#FFF" fill-rule="evenodd">
+            <g fill="#FFF" fillRule="evenodd">
               <path d="M0 6h13v2H0z" />
               <path d="M7.5.5v13h-2V.5z" />
             </g>
@@ -246,7 +362,7 @@ const TodoArea = ({
           Add new
         </button>
       </div>
-      <div className="wrapper">{getTodoList(todos)}</div>
+      <div className="wrapper">{getTodoList()}</div>
     </TodoAreaContainer>
   );
 };
