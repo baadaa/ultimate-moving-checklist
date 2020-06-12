@@ -46,6 +46,7 @@ class App extends React.Component {
       />
       <TodoArea
         currentSection={this.state.currentSection}
+        currentWeek={this.state.currentWeek}
         todos={this.state.todos}
         todoCompleteHandler={this.todoCompleteHandler}
         completedTaskIsHidden={this.state.completedTaskIsHidden}
