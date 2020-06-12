@@ -11,6 +11,7 @@ const NavArea = styled.nav`
   left: 0;
   right: 0;
   height: 50px;
+  z-index: 990;
   background: ${colors.lightBlue};
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
   ul {
@@ -71,7 +72,8 @@ const NavArea = styled.nav`
       font-size: 11px;
       font-weight: 800;
       justify-content: flex-end;
-      margin-bottom: 8px;
+      padding-bottom: 8px;
+      box-sizing: border-box;
     }
     svg {
       margin-right: 0;
