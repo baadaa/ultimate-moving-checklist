@@ -1,12 +1,27 @@
 import React from "react";
 import styled from "styled-components";
 import colors from "../UIElements/colors";
+import { ReactComponent as EmptyList } from "../../img/empty-list.svg";
 
 const TodoAreaContainer = styled.div`
   width: 100%;
   background: #ebf1f5;
   flex: 1;
   padding-bottom: 100px;
+  .emptyList {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    svg {
+      width: 250px;
+      height: 250px;
+      margin-bottom: 14px;
+      margin-top: 40px;
+    }
+    font-size: 16px;
+    font-weight: 800;
+    color: ${colors.blue};
+  }
   .wrapper {
     max-width: 600px;
     margin: 0 auto;
@@ -76,6 +91,21 @@ const TodoAreaContainer = styled.div`
           background: ${colors.lightBlue};
           transform: translateX(9px);
         }
+      }
+    }
+    button {
+      display: flex;
+      align-items: center;
+      border: none;
+      outline: none;
+      background: ${colors.lightBlue};
+      color: #fff;
+      padding: 7px 14px;
+      font-size: 12px;
+      font-weight: 400;
+      border-radius: 20px;
+      svg {
+        margin-right: 5px;
       }
     }
   }
@@ -148,61 +178,77 @@ const TodoAreaContainer = styled.div`
     }
   }
 `;
+
 const TodoArea = ({
   currentSection,
   todos,
   todoCompleteHandler,
   completedTaskIsHidden,
   completedTaskVisibilityHandler
-}) => (
-  <TodoAreaContainer currentSection={currentSection}>
-    <div className="viewContext">
-      <div className="wrapper">8 weeks before move</div>
-    </div>
-    <div className="wrapper toggler">
-      <div className="toggleDone">
-        <input
-          type="checkbox"
-          checked={completedTaskIsHidden}
-          name="toggleButton"
-          id="toggleButton"
-          onChange={completedTaskVisibilityHandler}
-        />
-        <label htmlFor="toggleButton">
-          <span className="toggleIndicator">
-            <span className="toggleDot"></span>
-          </span>
-          Hide completed
-        </label>
+}) => {
+  const getTodoList = todos => {
+    const List = todos.map((todo, i) => {
+      if (todo.done && completedTaskIsHidden) return null;
+      return (
+        <li className={todo.done ? "done" : null} key={i}>
+          <input
+            type="checkbox"
+            checked={todo.done}
+            name={"todo" + i}
+            id={"todo" + i}
+            onChange={() => todoCompleteHandler(i)}
+          />
+          <label htmlFor={"todo" + i}>
+            <span className="circle"></span>
+            {todo.content}
+          </label>
+        </li>
+      );
+    });
+    if (List.every(item => item === null))
+      return (
+        <span className="emptyList">
+          <EmptyList />
+          No items on this list
+        </span>
+      );
+    return <ul className="todos">{List}</ul>;
+  };
+
+  return (
+    <TodoAreaContainer currentSection={currentSection}>
+      <div className="viewContext">
+        <div className="wrapper">8 weeks before move</div>
       </div>
-      <button>Add new</button>
-    </div>
-    <div className="wrapper">
-      <ul className="todos">
-        {todos.map((todo, i) => (
-          <li
-            className={todo.done ? "done" : null}
-            key={i}
-            style={{
-              display: todo.done && completedTaskIsHidden ? "none" : null
-            }}
-          >
-            <input
-              type="checkbox"
-              checked={todo.done}
-              name={"todo" + i}
-              id={"todo" + i}
-              onChange={() => todoCompleteHandler(i)}
-            />
-            <label htmlFor={"todo" + i}>
-              <span className="circle"></span>
-              {todo.content}
-            </label>
-          </li>
-        ))}
-      </ul>
-    </div>
-  </TodoAreaContainer>
-);
+      <div className="wrapper toggler">
+        <div className="toggleDone">
+          <input
+            type="checkbox"
+            checked={completedTaskIsHidden}
+            name="toggleButton"
+            id="toggleButton"
+            onChange={completedTaskVisibilityHandler}
+          />
+          <label htmlFor="toggleButton">
+            <span className="toggleIndicator">
+              <span className="toggleDot"></span>
+            </span>
+            Hide completed
+          </label>
+        </div>
+        <button>
+          <svg width="14" height="14" xmlns="http://www.w3.org/2000/svg">
+            <g fill="#FFF" fill-rule="evenodd">
+              <path d="M0 6h13v2H0z" />
+              <path d="M7.5.5v13h-2V.5z" />
+            </g>
+          </svg>
+          Add new
+        </button>
+      </div>
+      <div className="wrapper">{getTodoList(todos)}</div>
+    </TodoAreaContainer>
+  );
+};
 
 export default TodoArea;
