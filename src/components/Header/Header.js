@@ -1,8 +1,9 @@
 import React from "react";
 import styled from "styled-components";
 import Nav from "../Nav/Nav";
-import hamburger from "../../img/hamburger.svg";
-import closeMenu from "../../img/close-nav.svg";
+import { ReactComponent as HamburgerIcon } from "../../img/hamburger.svg";
+import { ReactComponent as CloseMenuIcon } from "../../img/close-nav.svg";
+import { ReactComponent as RedDotIcon } from "../../img/red-dot.svg";
 import colors from "../UIElements/colors";
 
 const HeaderArea = styled.header`
@@ -45,8 +46,11 @@ const HeaderArea = styled.header`
     align-items: center;
     margin-right: 25px;
     width: 35px;
+    height: 35px;
     flex: 0;
     cursor: pointer;
+    position: relative;
+    overflow: visible;
   }
   .title {
     flex: 1;
@@ -59,6 +63,22 @@ const HeaderArea = styled.header`
     outline: none;
     color: ${colors.lightBlue};
     border: 1px solid ${colors.lightBlue};
+  }
+  .dot {
+    width: 15px;
+    height: 15px;
+    position: absolute;
+    top: -2px;
+    right: -7px;
+    pointer-events: none;
+  }
+  .burger {
+    width: 25px;
+    height: 22px;
+  }
+  .close {
+    width: 25px;
+    height: 26px;
   }
 `;
 
@@ -77,9 +97,10 @@ const getCurrentSection = section => {
 
 const Header = ({
   currentSection,
-  sectionChange,
-  toggleSettings,
-  settingIsOpen
+  sectionChangeHandler,
+  settingViewHandler,
+  settingIsOpen,
+  moveDateIsSet
 }) => {
   const sectionLabel = settingIsOpen
     ? "Move Details"
@@ -89,11 +110,21 @@ const Header = ({
       <HeaderArea>
         <div className="wrapper">
           <div className="menu">
-            <img
-              src={settingIsOpen ? closeMenu : hamburger}
-              alt=""
-              onClick={toggleSettings}
-            />
+            {settingIsOpen ? (
+              <CloseMenuIcon
+                className="close"
+                onClick={settingViewHandler}
+                alt=""
+              />
+            ) : (
+              <HamburgerIcon
+                className="burger"
+                onClick={settingViewHandler}
+                alt=""
+              />
+            )}
+            {}
+            {!moveDateIsSet ? <RedDotIcon className="dot" alt="" /> : null}
           </div>
           <div className="title">
             <h1>Moving Checklist</h1>
@@ -102,7 +133,10 @@ const Header = ({
           <button>Close</button>
         </div>
       </HeaderArea>
-      <Nav currentSection={currentSection} sectionChange={sectionChange} />
+      <Nav
+        currentSection={currentSection}
+        sectionChangeHandler={sectionChangeHandler}
+      />
     </>
   );
 };

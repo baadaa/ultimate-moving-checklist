@@ -1,9 +1,9 @@
 import React from "react";
 import styled from "styled-components";
 import colors from "../UIElements/colors";
-import calendar from "../../img/calendar.svg";
-import category from "../../img/category.svg";
-import personal from "../../img/personal.svg";
+import { ReactComponent as CalendarIcon } from "../../img/calendar.svg";
+import { ReactComponent as CategoryIcon } from "../../img/category.svg";
+import { ReactComponent as PersonalIcon } from "../../img/personal.svg";
 
 const NavArea = styled.nav`
   position: fixed;
@@ -12,6 +12,7 @@ const NavArea = styled.nav`
   right: 0;
   height: 50px;
   background: ${colors.lightBlue};
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
   ul {
     display: flex;
     margin: 0 auto;
@@ -33,12 +34,13 @@ const NavArea = styled.nav`
     opacity: 0.5;
     transition: opacity 0.2s;
     cursor: pointer;
+    height: 100%;
     &.active,
     &:hover {
       opacity: 1;
     }
   }
-  img {
+  svg {
     margin-right: 10px;
     pointer-events: none;
   }
@@ -59,6 +61,8 @@ const NavArea = styled.nav`
     top: auto;
     bottom: 0;
     height: 70px;
+    box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.3);
+
     ul {
       align-items: flex-end;
     }
@@ -69,7 +73,7 @@ const NavArea = styled.nav`
       justify-content: flex-end;
       margin-bottom: 8px;
     }
-    img {
+    svg {
       margin-right: 0;
       margin-bottom: 5px;
     }
@@ -88,32 +92,32 @@ const NavArea = styled.nav`
   }
 `;
 
-const Nav = ({ currentSection, sectionChange }) => {
+const Nav = ({ currentSection, sectionChangeHandler }) => {
   return (
     <NavArea>
       <ul>
         <li
           data-section="weekly"
           className={currentSection === "weekly" ? "active" : null}
-          onClick={sectionChange}
+          onClick={sectionChangeHandler}
         >
-          <img className="calendar" src={calendar} alt="" />
+          <CalendarIcon className="calendar" alt="" />
           Weekly view
         </li>
         <li
           data-section="category"
           className={currentSection === "category" ? "active" : null}
-          onClick={sectionChange}
+          onClick={sectionChangeHandler}
         >
-          <img className="category" src={category} alt="" />
+          <CategoryIcon className="category" alt="" />
           Category view
         </li>
         <li
           data-section="personal"
           className={currentSection === "personal" ? "active" : null}
-          onClick={sectionChange}
+          onClick={sectionChangeHandler}
         >
-          <img className="personal" src={personal} alt="" />
+          <PersonalIcon className="personal" alt="" />
           Personal list
         </li>
       </ul>
