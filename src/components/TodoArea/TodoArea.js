@@ -56,7 +56,7 @@ const TodoAreaContainer = styled.div`
       right: 0;
       display: ${props =>
         props.currentSection === "personal" ? "flex" : "none"};
-      padding: 25px;
+      padding: 20px 25px;
       flex-direction: column;
       background: #fff;
       border-radius: 10px;
@@ -79,6 +79,7 @@ const TodoAreaContainer = styled.div`
       margin: 16px 0;
       padding: 15px 20px;
       border: none;
+      outline: none;
     }
     button {
       width: 100px;
@@ -102,6 +103,16 @@ const TodoAreaContainer = styled.div`
     .cancel {
       color: ${colors.green};
       background: #fff;
+    }
+    .close {
+      position: absolute;
+      top: 20px;
+      right: 15px;
+      padding: 0;
+      border: none;
+      width: auto;
+      height: auto;
+      background: transparent;
     }
     button + button {
       margin-left: 10px;
@@ -311,9 +322,11 @@ const TodoArea = ({
 }) => {
   const [dropdownIsOpen, setDropdownIsOpen] = useState(false);
   const [isAddingNew, setIsAddingNew] = useState(false);
+  const [newItem, setNewItem] = useState("");
   useEffect(() => {
     if (currentSection !== "personal") setIsAddingNew(false);
-  }, [currentSection]);
+    if (!isAddingNew) setNewItem("");
+  }, [currentSection, isAddingNew]);
   const getTodoList = () => {
     let todosInCurrentSelection;
     if (currentSection === "weekly") {
@@ -389,6 +402,9 @@ const TodoArea = ({
     setIsAddingNew(!isAddingNew);
     sectionChangeHandler(null, "personal");
   };
+  const handleInput = e => {
+    setNewItem(e.target.value);
+  };
   return (
     <TodoAreaContainer
       currentSection={currentSection}
@@ -449,13 +465,21 @@ const TodoArea = ({
       </div>
       <div className="wrapper newTodo">
         <div className="positioned">
+          <button className="close" onClick={() => setIsAddingNew(false)}>
+            <Close />
+          </button>
           <h4>Add a new item</h4>
-          <input type="text" placeholder="What do you need for your move?" />
+          <input
+            type="text"
+            value={newItem}
+            placeholder="What do you need for your move?"
+            onChange={handleInput}
+          />
           <span style={{ display: "flex", marginLeft: "auto" }}>
             <button className="save">
               <Yes /> Save
             </button>
-            <button className="cancel">
+            <button className="cancel" onClick={() => setIsAddingNew(false)}>
               <No /> Cancel
             </button>
           </span>
