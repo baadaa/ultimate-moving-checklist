@@ -56,6 +56,11 @@ class App extends React.Component {
     const currentVisibility = this.state.completedTaskIsHidden;
     this.setState({ completedTaskIsHidden: !currentVisibility });
   };
+  saveNewTodo = newItem => {
+    const todos = this.state.todos;
+    todos.push(newItem);
+    this.setState({ todos });
+  };
   categoryList = [
     "Category 1",
     "Category 2",
@@ -85,6 +90,7 @@ class App extends React.Component {
         categoryChangeHandler={this.categoryChangeHandler}
         completedTaskIsHidden={this.state.completedTaskIsHidden}
         completedTaskVisibilityHandler={this.completedTaskVisibilityHandler}
+        saveNewTodo={this.saveNewTodo}
       />
       <Settings isOpen={this.state.settingIsOpen} />
     </>

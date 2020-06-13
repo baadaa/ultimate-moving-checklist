@@ -318,7 +318,8 @@ const TodoArea = ({
   categoryChangeHandler,
   completedTaskIsHidden,
   sectionChangeHandler,
-  completedTaskVisibilityHandler
+  completedTaskVisibilityHandler,
+  saveNewTodo
 }) => {
   const [dropdownIsOpen, setDropdownIsOpen] = useState(false);
   const [isAddingNew, setIsAddingNew] = useState(false);
@@ -405,6 +406,19 @@ const TodoArea = ({
   const handleInput = e => {
     setNewItem(e.target.value);
   };
+  const processNewTodo = () => {
+    const addedItem = {
+      id: new Date().getMilliseconds(),
+      done: false,
+      personal: true,
+      week: null,
+      category: null,
+      tags: [],
+      content: newItem
+    };
+    saveNewTodo(addedItem);
+    setIsAddingNew(false);
+  };
   return (
     <TodoAreaContainer
       currentSection={currentSection}
@@ -474,9 +488,11 @@ const TodoArea = ({
             value={newItem}
             placeholder="What do you need for your move?"
             onChange={handleInput}
+            onKeyUp={e => (e.keyCode === 13 ? processNewTodo() : null)}
+            onKeyDown={e => (e.keyCode === 27 ? setIsAddingNew(false) : null)}
           />
           <span style={{ display: "flex", marginLeft: "auto" }}>
-            <button className="save">
+            <button className="save" onClick={processNewTodo}>
               <Yes /> Save
             </button>
             <button className="cancel" onClick={() => setIsAddingNew(false)}>
