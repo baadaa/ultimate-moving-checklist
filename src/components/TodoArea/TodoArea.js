@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import colors from "../UIElements/colors";
 import { ReactComponent as EmptyList } from "../../img/empty-list.svg";
@@ -30,6 +30,7 @@ const TodoAreaContainer = styled.div`
     padding: 0 15px;
     width: 100%;
   }
+
   .viewContext {
     display: flex;
     height: ${props => (props.currentSection === "personal" ? "0" : "40px")};
@@ -42,6 +43,33 @@ const TodoAreaContainer = styled.div`
       props.currentSection === "personal" ? "transparent" : "#fff"};
     background-color: ${props =>
       props.currentSection === "weekly" ? colors.navy : colors.blue};
+  }
+  .newTodo {
+    display: ${props =>
+      props.currentSection === "personal" ? "flex" : "none"};
+    padding: 25px;
+    flex-direction: column;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 1px 8px rgba(0, 0, 0, 0.3);
+    margin-bottom: 25px;
+    transform: ${props =>
+      props.isAddingNew ? "translateY(0)" : "translateY(-30px)"};
+    opacity: ${props => (props.isAddingNew ? 1 : 0)};
+    pointer-events: ${props => (props.isAddingNew ? "all " : "none")};
+    transition: transform 0.2s, opacity 0.2s;
+    h4 {
+      margin: 0;
+      font-size: 20px;
+      font-weight: 200;
+    }
+    input {
+      background: #eee;
+      font-size: 17px;
+      margin: 16px 0;
+      padding: 8px 16px;
+      border: none;
+    }
   }
   .categoryList {
     position: absolute;
@@ -138,16 +166,27 @@ const TodoAreaContainer = styled.div`
     button {
       display: flex;
       align-items: center;
-      border: none;
+      border: 1px solid #fff;
+      border-color: ${props =>
+        props.isAddingNew ? colors.lightBlue : "transparent"};
       outline: none;
-      background: ${colors.lightBlue};
-      color: #fff;
+      background: ${props =>
+        props.isAddingNew ? "transparent" : colors.lightBlue};
+      color: ${props => (props.isAddingNew ? colors.lightBlue : "#fff")};
       padding: 7px 14px;
       font-size: 12px;
       font-weight: 400;
       border-radius: 20px;
+      transition: background 0.2s;
       svg {
         margin-right: 5px;
+        transform: ${props =>
+          props.isAddingNew ? "rotate(45deg)" : "rotate(0deg)"};
+        g {
+          fill: ${props => (props.isAddingNew ? colors.lightBlue : "#ffffff")};
+        }
+
+        transition: transform 0.2s, fill 0.2s;
       }
     }
   }
@@ -231,9 +270,14 @@ const TodoArea = ({
   weekChangeHandler,
   categoryChangeHandler,
   completedTaskIsHidden,
+  sectionChangeHandler,
   completedTaskVisibilityHandler
 }) => {
   const [dropdownIsOpen, setDropdownIsOpen] = useState(false);
+  const [isAddingNew, setIsAddingNew] = useState(false);
+  useEffect(() => {
+    if (currentSection !== "personal") setIsAddingNew(false);
+  }, [currentSection]);
   const getTodoList = () => {
     let todosInCurrentSelection;
     if (currentSection === "weekly") {
@@ -305,11 +349,16 @@ const TodoArea = ({
     setDropdownIsOpen(false);
     categoryChangeHandler(targetCategory);
   };
+  const toggleAddNewBox = () => {
+    setIsAddingNew(!isAddingNew);
+    sectionChangeHandler(null, "personal");
+  };
   return (
     <TodoAreaContainer
       currentSection={currentSection}
       currentWeek={currentWeek}
       dropdownIsOpen={dropdownIsOpen}
+      isAddingNew={isAddingNew}
     >
       <div className="viewContext">
         <div
@@ -352,15 +401,19 @@ const TodoArea = ({
             Hide completed
           </label>
         </div>
-        <button>
+        <button onClick={toggleAddNewBox}>
           <svg width="14" height="14" xmlns="http://www.w3.org/2000/svg">
             <g fill="#FFF" fillRule="evenodd">
               <path d="M0 6h13v2H0z" />
               <path d="M7.5.5v13h-2V.5z" />
             </g>
           </svg>
-          Add new
+          {isAddingNew ? "Cancel" : "Add new"}
         </button>
+      </div>
+      <div className="wrapper newTodo">
+        <h4>Add a new item</h4>
+        <input type="text" placeholder="What do you need for your move?" />
       </div>
       <div className="wrapper">{getTodoList()}</div>
     </TodoAreaContainer>

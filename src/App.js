@@ -19,8 +19,8 @@ class App extends React.Component {
     (function(l){var i,s={touchend:function(){}};for(i in s)l.addEventListener(i,s)})(document); // sticky hover fix in iOS
     this.setState({ todos });
   }
-  sectionChangeHandler = e => {
-    const targetSection = e.target.dataset.section;
+  sectionChangeHandler = (e, option) => {
+    const targetSection = option ? option : e.target.dataset.section;
     this.setState({ currentSection: targetSection });
   };
   settingViewHandler = () => {
@@ -81,6 +81,7 @@ class App extends React.Component {
         todos={this.state.todos}
         todoCompleteHandler={this.todoCompleteHandler}
         weekChangeHandler={this.weekChangeHandler}
+        sectionChangeHandler={this.sectionChangeHandler}
         categoryChangeHandler={this.categoryChangeHandler}
         completedTaskIsHidden={this.state.completedTaskIsHidden}
         completedTaskVisibilityHandler={this.completedTaskVisibilityHandler}
