@@ -2,6 +2,9 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import colors from "../UIElements/colors";
 import { ReactComponent as EmptyList } from "../../img/empty-list.svg";
+import { ReactComponent as Yes } from "../../img/yes.svg";
+import { ReactComponent as No } from "../../img/no.svg";
+import { ReactComponent as Close } from "../../img/close.svg";
 import { RightArrow, LeftArrow, DownArrow } from "../UIElements/arrows";
 
 const TodoAreaContainer = styled.div`
@@ -45,19 +48,26 @@ const TodoAreaContainer = styled.div`
       props.currentSection === "weekly" ? colors.navy : colors.blue};
   }
   .newTodo {
-    display: ${props =>
-      props.currentSection === "personal" ? "flex" : "none"};
-    padding: 25px;
-    flex-direction: column;
-    background: #fff;
-    border-radius: 10px;
-    box-shadow: 0 1px 8px rgba(0, 0, 0, 0.3);
-    margin-bottom: 25px;
-    transform: ${props =>
-      props.isAddingNew ? "translateY(0)" : "translateY(-30px)"};
-    opacity: ${props => (props.isAddingNew ? 1 : 0)};
-    pointer-events: ${props => (props.isAddingNew ? "all " : "none")};
-    transition: transform 0.2s, opacity 0.2s;
+    position: relative;
+    .positioned {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      display: ${props =>
+        props.currentSection === "personal" ? "flex" : "none"};
+      padding: 25px;
+      flex-direction: column;
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 1px 8px rgba(0, 0, 0, 0.3);
+      margin-bottom: 25px;
+      transform: ${props =>
+        props.isAddingNew ? "translateY(0)" : "translateY(-30px)"};
+      opacity: ${props => (props.isAddingNew ? 1 : 0)};
+      pointer-events: ${props => (props.isAddingNew ? "all " : "none")};
+      transition: transform 0.2s, opacity 0.2s;
+    }
     h4 {
       margin: 0;
       font-size: 20px;
@@ -67,8 +77,34 @@ const TodoAreaContainer = styled.div`
       background: #eee;
       font-size: 17px;
       margin: 16px 0;
-      padding: 8px 16px;
+      padding: 15px 20px;
       border: none;
+    }
+    button {
+      width: 100px;
+      height: 45px;
+      display: flex;
+      outline: none;
+      border-radius: 22px;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid ${colors.green};
+      font-weight: 400;
+      font-size: 14px;
+      svg {
+        margin-right: 8px;
+      }
+    }
+    .save {
+      background: ${colors.green};
+      color: #fff;
+    }
+    .cancel {
+      color: ${colors.green};
+      background: #fff;
+    }
+    button + button {
+      margin-left: 10px;
     }
   }
   .categoryList {
@@ -412,8 +448,18 @@ const TodoArea = ({
         </button>
       </div>
       <div className="wrapper newTodo">
-        <h4>Add a new item</h4>
-        <input type="text" placeholder="What do you need for your move?" />
+        <div className="positioned">
+          <h4>Add a new item</h4>
+          <input type="text" placeholder="What do you need for your move?" />
+          <span style={{ display: "flex", marginLeft: "auto" }}>
+            <button className="save">
+              <Yes /> Save
+            </button>
+            <button className="cancel">
+              <No /> Cancel
+            </button>
+          </span>
+        </div>
       </div>
       <div className="wrapper">{getTodoList()}</div>
     </TodoAreaContainer>
