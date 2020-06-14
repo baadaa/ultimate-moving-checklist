@@ -20,8 +20,22 @@ class App extends React.Component {
   componentDidMount() {
     // eslint-disable-next-line
     (function(l){var i,s={touchend:function(){}};for(i in s)l.addEventListener(i,s)})(document); // sticky hover fix in iOS
-    this.setState({ todos });
+    if (window.localStorage.getItem("updTestListData")) {
+      const savedState = JSON.parse(
+        window.localStorage.getItem("updTestListData")
+      );
+      this.setState({ ...savedState });
+    } else {
+      this.setState({ todos }, () => this.setLocalStorage());
+    }
   }
+  setLocalStorage = () => {
+    const allExceptSettingState = { ...this.state, settingIsOpen: false };
+    window.localStorage.setItem(
+      "updTestListData",
+      JSON.stringify(allExceptSettingState)
+    );
+  };
   sectionChangeHandler = (e, option) => {
     const targetSection = option ? option : e.target.dataset.section;
     this.setState({ currentSection: targetSection });
@@ -34,14 +48,13 @@ class App extends React.Component {
   };
   settingChangeHandler = (e, date) => {
     if (date) {
-      this.setState({ moveDate: date });
+      this.setState({ moveDate: date }, () => this.setLocalStorage());
       return;
     }
-    console.log(e);
     const setting = e.target.dataset.q;
     const value =
       e.target.type === "checkbox" ? e.target.checked : e.target.value;
-    this.setState({ [setting]: value });
+    this.setState({ [setting]: value }, () => this.setLocalStorage());
   };
   todoCompleteHandler = id => {
     const todos = this.state.todos.map(todo => {
@@ -50,7 +63,7 @@ class App extends React.Component {
       }
       return { ...todo, done: !todo.done };
     });
-    this.setState({ todos });
+    this.setState({ todos }, () => this.setLocalStorage());
   };
   weekChangeHandler = direction => {
     const weeks = [-8, -6, -4, -2, -1, 0, 1];
@@ -70,12 +83,14 @@ class App extends React.Component {
   };
   completedTaskVisibilityHandler = () => {
     const currentVisibility = this.state.completedTaskIsHidden;
-    this.setState({ completedTaskIsHidden: !currentVisibility });
+    this.setState({ completedTaskIsHidden: !currentVisibility }, () =>
+      this.setLocalStorage()
+    );
   };
   saveNewTodo = newItem => {
     const todos = this.state.todos;
     todos.push(newItem);
-    this.setState({ todos });
+    this.setState({ todos }, () => this.setLocalStorage());
   };
   categoryList = [
     "Category 1",
