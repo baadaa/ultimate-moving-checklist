@@ -144,9 +144,22 @@ const TodoAreaContainer = styled.div`
     opacity: ${props => (props.dropdownIsOpen ? 1 : 0)};
     box-shadow: 0 7px 10px rgba(0, 0, 0, 0.3);
     pointer-events: ${props => (props.dropdownIsOpen ? "all" : "none")};
+    list-style: none;
+
     li {
+      max-width: 600px;
+      box-sizing: border-box;
+      width: 100%;
+      margin: 0 auto;
       padding: 7px 15px;
       font-weight: 200;
+      cursor: pointer;
+      &:hover {
+        font-weight: 400;
+      }
+      &:last-of-type {
+        padding-bottom: 20px;
+      }
     }
   }
   .weekChanger {
