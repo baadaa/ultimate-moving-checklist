@@ -30,7 +30,12 @@ class App extends React.Component {
     const currentlyOpen = this.state.settingIsOpen;
     this.setState({ settingIsOpen: !currentlyOpen });
   };
-  settingChangeHandler = e => {
+  settingChangeHandler = (e, date) => {
+    if (date) {
+      this.setState({ moveDate: date });
+      return;
+    }
+    console.log(e);
     const setting = e.target.dataset.q;
     const value =
       e.target.type === "checkbox" ? e.target.checked : e.target.value;

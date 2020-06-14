@@ -10,9 +10,9 @@
   animation: none;
   direction: ltr;
   border: 0;
-  font-size: 14px;
-  line-height: 24px;
-  border-radius: 5px;
+  font-size: 12px;
+  line-height: 1.7;
+  border-radius: 10px;
   position: absolute;
   width: 315px;
   box-sizing: border-box;
@@ -20,7 +20,8 @@
   transition: top cubic-bezier(0, 1, 0.5, 1) 100ms;
   z-index: 999;
   background: #fff;
-  box-shadow: 1px 0 0 #e6e6e6, -1px 0 0 #e6e6e6, 0 1px 0 #e6e6e6, 0 -1px 0 #e6e6e6, 0 3px 13px rgba(0, 0, 0, 0.08);
+  box-shadow: 1px 0 0 #e6e6e6, -1px 0 0 #e6e6e6, 0 1px 0 #e6e6e6,
+    0 -1px 0 #e6e6e6, 0 3px 13px rgba(0, 0, 0, 0.08);
 }
 
 .flatpickr-calendar.open,
@@ -71,7 +72,7 @@
   display: block;
   pointer-events: none;
   border: solid transparent;
-  content: '';
+  content: "";
   height: 0;
   width: 0;
   left: 22px;
@@ -303,7 +304,7 @@
 }
 
 .flatpickr-current-month span.cur-month {
-  font-family: inherit;
+  font-family: "ars-maquette-web", Helvetica, Arial, sans-serif;
   font-weight: 700;
   color: inherit;
   display: inline-block;
@@ -338,7 +339,7 @@
   margin: 0;
   display: inline;
   font-size: inherit;
-  font-family: inherit;
+  font-family: "ars-maquette-web", Helvetica, Arial, sans-serif;
   font-weight: 300;
   line-height: inherit;
   height: initial;
@@ -387,19 +388,20 @@
 }
 
 .flatpickr-day {
+  font-family: "ars-maquette-web", Helvetica, Arial, sans-serif;
   background: none;
   border: 1px solid transparent;
   border-radius: 150px;
   box-sizing: border-box;
   color: #393939;
   cursor: pointer;
-  font-weight: 400;
+  font-weight: 200;
   width: 14.2857143%;
   -ms-flex-preferred-size: 14.2857143%;
   flex-basis: 14.2857143%;
   // max-width: 40px;
-  height: 40px;
-  line-height: 40px;
+  height: 35px;
+  line-height: 35px;
   margin: 0;
   display: inline-block;
   position: relative;
@@ -494,6 +496,7 @@
 }
 
 span.flatpickr-weekday {
+  font-family: "ars-maquette-web", Helvetica, Arial, sans-serif;
   cursor: default;
   font-size: 90%;
   color: rgba(0, 0, 0, 0.54);
@@ -505,7 +508,7 @@ span.flatpickr-weekday {
   display: block;
   float: left;
   width: 14.28%;
-  font-weight: bold;
+  font-weight: 400;
   margin: 0;
   padding-top: 3.333333333333333px;
 }

@@ -52,8 +52,8 @@ const TodoAreaContainer = styled.div`
     .positioned {
       position: absolute;
       top: 0;
-      left: 0;
-      right: 0;
+      left: 15px;
+      right: 15px;
       display: ${props =>
         props.currentSection === "personal" ? "flex" : "none"};
       padding: 20px 25px;
@@ -116,6 +116,15 @@ const TodoAreaContainer = styled.div`
     }
     button + button {
       margin-left: 10px;
+    }
+    @media screen and (max-width: 450px) {
+      h4 {
+        font-size: 18px;
+      }
+      input {
+        font-size: 15px;
+        padding: 12px 15px;
+      }
     }
   }
   .categoryList {
@@ -468,7 +477,7 @@ const TodoArea = ({
             <span className="toggleIndicator">
               <span className="toggleDot"></span>
             </span>
-            Hide completed
+            {completedTaskIsHidden ? "Show completed" : "Hide completed"}
           </label>
         </div>
         <button onClick={toggleAddNewBox}>
