@@ -28,7 +28,9 @@ class App extends React.Component {
   };
   settingViewHandler = () => {
     const currentlyOpen = this.state.settingIsOpen;
-    this.setState({ settingIsOpen: !currentlyOpen });
+    const moveDate =
+      this.state.moveDate.length === 0 ? "" : this.state.moveDate; // To catch edge-case where Flatpickr date is manually removed
+    this.setState({ settingIsOpen: !currentlyOpen, moveDate });
   };
   settingChangeHandler = (e, date) => {
     if (date) {
