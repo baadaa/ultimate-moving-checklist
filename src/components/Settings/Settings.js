@@ -50,6 +50,12 @@ const SettingsArea = styled.div`
     input {
       box-sizing: border-box;
       width: 100%;
+      padding: 15px 25px;
+      border: 1px solid red;
+    }
+    .flatpickr-mobile {
+      background: blue;
+      width: 100%;
     }
   }
   .dateInput,
@@ -102,9 +108,6 @@ const Settings = ({
   const datePicker = useRef();
   const dateFormat = (selectedDates, dateStr, instance) => {
     settingChangeHandler(null, dateStr);
-    // // this.setState({ addedDateMissing: false, error: false });
-    console.log(selectedDates, dateStr, instance);
-    // // this.props.editDate(dateStr, instance.element.id);
   };
   useEffect(() => {
     flatpickr(datePicker.current, {
