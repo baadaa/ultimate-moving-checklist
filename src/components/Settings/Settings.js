@@ -1,7 +1,7 @@
-import React, { useRef, useEffect } from "react";
+import React from "react";
 import styled from "styled-components";
-import flatpickr from "flatpickr";
-import "../../styles/flatpick.scss";
+import Flatpickr from "react-flatpickr";
+import "flatpickr/dist/themes/material_green.css";
 import colors from "../UIElements/colors";
 import { ReactComponent as Check } from "../../img/yes.svg";
 
@@ -47,15 +47,16 @@ const SettingsArea = styled.div`
   .dateInputContainer {
     position: relative;
     flex: 1;
+    padding: 15px 25px;
+    background: #eee;
+    border-radius: 10px;
+    border: none;
     input {
       box-sizing: border-box;
       width: 100%;
-      padding: 15px 25px;
-      border: 1px solid red;
-    }
-    .flatpickr-mobile {
-      background: blue;
-      width: 100%;
+      flex: 1;
+      border: none;
+      background: transparent;
     }
   }
   .dateInput,
@@ -105,16 +106,10 @@ const Settings = ({
   hasPet,
   hasChild
 }) => {
-  const datePicker = useRef();
-  const dateFormat = (selectedDates, dateStr, instance) => {
-    settingChangeHandler(null, dateStr);
+  const flatpickrOptions = {
+    minDate: "today",
+    dateFormat: "M d, Y"
   };
-  useEffect(() => {
-    flatpickr(datePicker.current, {
-      onChange: dateFormat,
-      dateFormat: "F j, Y"
-    });
-  });
   return (
     <SettingsArea isOpen={isOpen}>
       <div className="wrapper">
@@ -122,28 +117,11 @@ const Settings = ({
           <div className="row">
             <span className="rowLabel">Move Date</span>
             <div className="dateInputContainer">
-              <input
-                type="text"
-                placeholder={new Date().toDateString()}
-                className="dateInput"
+              <Flatpickr
                 value={moveDate}
-                onChange={() => console.log("te")}
-                style={{
-                  position: "absolute",
-                  top: 0,
-                  left: 0,
-                  right: 0,
-                  bottom: 0,
-                  background: "transparent",
-                  pointerEvents: "none"
-                }}
-              />
-              <input
-                className="dateInput flatpickr-input form-control input"
-                type="text"
-                value={moveDate}
-                ref={datePicker}
-                onChange={() => console.log("te")}
+                options={flatpickrOptions}
+                placeholder="Enter date..."
+                onChange={date => settingChangeHandler(null, date)}
               />
             </div>
           </div>
