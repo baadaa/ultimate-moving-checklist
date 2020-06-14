@@ -12,6 +12,9 @@ class App extends React.Component {
     settingIsOpen: false,
     completedTaskIsHidden: false,
     moveDate: "",
+    residenceType: null,
+    hasPet: true,
+    hasChild: true,
     todos: []
   };
   componentDidMount() {
@@ -26,6 +29,12 @@ class App extends React.Component {
   settingViewHandler = () => {
     const currentlyOpen = this.state.settingIsOpen;
     this.setState({ settingIsOpen: !currentlyOpen });
+  };
+  settingChangeHandler = e => {
+    const setting = e.target.dataset.q;
+    const value =
+      e.target.type === "checkbox" ? e.target.checked : e.target.value;
+    this.setState({ [setting]: value });
   };
   todoCompleteHandler = id => {
     const todos = this.state.todos.map(todo => {
@@ -91,8 +100,18 @@ class App extends React.Component {
         completedTaskIsHidden={this.state.completedTaskIsHidden}
         completedTaskVisibilityHandler={this.completedTaskVisibilityHandler}
         saveNewTodo={this.saveNewTodo}
+        hasChild={this.state.hasChild}
+        hasPet={this.state.hasPet}
       />
-      <Settings isOpen={this.state.settingIsOpen} />
+      <Settings
+        isOpen={this.state.settingIsOpen}
+        settingViewHandler={this.settingViewHandler}
+        moveDate={this.state.moveDate}
+        residenceType={this.state.residenceType}
+        hasPet={this.state.hasPet}
+        hasChild={this.state.hasChild}
+        settingChangeHandler={this.settingChangeHandler}
+      />
     </>
   );
 }

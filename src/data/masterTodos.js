@@ -51,7 +51,7 @@ const todos = [
     personal: false,
     week: -8,
     category: "Category 2",
-    tags: [],
+    tags: ["child"],
     content: "Choose a school for your kids"
   },
   {
@@ -60,7 +60,7 @@ const todos = [
     personal: false,
     week: -8,
     category: "Category 1",
-    tags: [],
+    tags: ["child"],
     content: "Request transcripts for your kids from their old school"
   },
   {
@@ -372,7 +372,7 @@ const todos = [
     personal: false,
     week: -4,
     category: "Category 3",
-    tags: [],
+    tags: ["pet"],
     content: "Make sure pets have updated ID tags for their collars"
   },
   {
@@ -381,9 +381,9 @@ const todos = [
     personal: false,
     week: -4,
     category: "Category 2",
-    tags: [],
+    tags: ["pet"],
     content:
-      "Request copies of vet records, and optain any necessary pet medication"
+      "Request copies of vet records, and obtain any necessary pet medication"
   },
   {
     id: 43,
@@ -391,7 +391,7 @@ const todos = [
     personal: false,
     week: -4,
     category: "Category 3",
-    tags: [],
+    tags: ["pet"],
     content:
       "If moving out of the country, make sure pets have all necessary vaccinations"
   },
@@ -494,7 +494,7 @@ const todos = [
     personal: false,
     week: -2,
     category: "Category 4",
-    tags: [],
+    tags: ["child"],
     content:
       "For moving day, line up a babysitter or make arrangements for a playdate"
   },
@@ -504,7 +504,7 @@ const todos = [
     personal: false,
     week: -2,
     category: "Category 3",
-    tags: [],
+    tags: ["pet"],
     content: "Find somewhere safe for pets to go during the move"
   },
   {

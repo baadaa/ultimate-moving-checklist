@@ -312,6 +312,8 @@ const TodoArea = ({
   currentWeek,
   currentCategory,
   categoryList,
+  hasPet,
+  hasChild,
   todos,
   todoCompleteHandler,
   weekChangeHandler,
@@ -342,6 +344,8 @@ const TodoArea = ({
 
     const List = todosInCurrentSelection.map((todo, i) => {
       if (todo.done && completedTaskIsHidden) return null;
+      if (!hasChild && todo.tags.indexOf("child") !== -1) return null;
+      if (!hasPet && todo.tags.indexOf("pet") !== -1) return null;
       return (
         <li className={todo.done ? "done" : null} key={todo.id}>
           <input
