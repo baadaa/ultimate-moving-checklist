@@ -30,11 +30,12 @@ class App extends React.Component {
     }
   }
   setLocalStorage = () => {
-    const allExceptSettingState = { ...this.state, settingIsOpen: false };
-    window.localStorage.setItem(
-      "updTestListData",
-      JSON.stringify(allExceptSettingState)
-    );
+    const allExceptUi = {
+      ...this.state,
+      currentSection: "weekly",
+      settingIsOpen: false
+    };
+    window.localStorage.setItem("updTestListData", JSON.stringify(allExceptUi));
   };
   sectionChangeHandler = (e, option) => {
     const targetSection = option ? option : e.target.dataset.section;
