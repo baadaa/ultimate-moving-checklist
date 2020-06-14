@@ -24,11 +24,41 @@ class App extends React.Component {
       const savedState = JSON.parse(
         window.localStorage.getItem("updTestListData")
       );
-      this.setState({ ...savedState });
+      this.setState({ ...savedState, currentWeek: this.calculateWeeks() });
     } else {
       this.setState({ todos }, () => this.setLocalStorage());
     }
   }
+  calculateWeeks = () => {
+    const today = new Date().getTime();
+    const movingDate = Date.parse(
+      JSON.parse(window.localStorage.getItem("updTestListData")).moveDate[0]
+    );
+    const calcCategory = days => {
+      if (days > 42) {
+        return -8;
+      } else if (days > 28) {
+        return -6;
+      } else if (days > 14) {
+        return -4;
+      } else if (days > 7) {
+        return -2;
+      } else if (days > 0) {
+        return -1;
+      } else if (days === 0) {
+        return 0;
+      } else {
+        return 1;
+      }
+    };
+    if (!movingDate) {
+      return -8;
+    } else {
+      const diff = (movingDate - today) / 1000 / (60 * 60 * 24);
+      const diffDays = Math.round(diff);
+      return calcCategory(diffDays);
+    }
+  };
   setLocalStorage = () => {
     const allExceptUi = {
       ...this.state,
