@@ -69,7 +69,12 @@ class App extends React.Component {
   };
   sectionChangeHandler = (e, option) => {
     const targetSection = option ? option : e.target.dataset.section;
-    this.setState({ currentSection: targetSection });
+    this.setState({ currentSection: targetSection }, () => {
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+      });
+    });
   };
   settingViewHandler = () => {
     const currentlyOpen = this.state.settingIsOpen;
