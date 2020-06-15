@@ -4,6 +4,8 @@ import Nav from "../Nav/Nav";
 import { ReactComponent as HamburgerIcon } from "../../img/hamburger.svg";
 import { ReactComponent as CloseMenuIcon } from "../../img/close-nav.svg";
 import { ReactComponent as RedDotIcon } from "../../img/red-dot.svg";
+import { ReactComponent as Bell } from "../../img/bell.svg";
+import { ReactComponent as Ok } from "../../img/yes.svg";
 import colors from "../UIElements/colors";
 
 const HeaderArea = styled.header`
@@ -81,7 +83,59 @@ const HeaderArea = styled.header`
     height: 26px;
   }
 `;
-
+const Notice = styled.div`
+  position: fixed;
+  top: 86px;
+  left: 0;
+  right: 0;
+  padding: 0 15px;
+  .notification {
+    display: flex;
+    box-sizing: border-box;
+    max-width: 350px;
+    margin-left: auto;
+    align-items: center;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 1px 10px rgba(0, 0, 0, 0.3);
+  }
+  .icon {
+    background: ${colors.green};
+    align-self: stretch;
+    border-radius: 10px 0 0 10px;
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    svg {
+      width: 20px;
+      height: 20px;
+    }
+  }
+  p {
+    font-size: 12px;
+    line-height: 1.5;
+    margin: 15px;
+  }
+  button {
+    flex-basis: 60px;
+    margin-right: 15px;
+    font-size: 12px;
+    border: none;
+    outline: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: ${colors.green};
+    color: #fff;
+    border-radius: 4px;
+    padding: 8px 10px;
+    svg {
+      width: 10px;
+      height: 8px;
+      margin-right: 5px;
+    }
+  }
+`;
 const getCurrentSection = section => {
   switch (section) {
     case "weekly":
@@ -132,6 +186,27 @@ const Header = ({
           </div>
           <button>Close</button>
         </div>
+        <Notice>
+          <div
+            style={{
+              maxWidth: "570px",
+              margin: "0 auto"
+            }}
+          >
+            <div className="notification">
+              <span className="icon">
+                <Bell />
+              </span>
+              <p>
+                Everything is automatically saved in your browser. Close the tab
+                anytime, and come back to tackle more tasks.
+              </p>
+              <button>
+                <Ok /> OK
+              </button>
+            </div>
+          </div>
+        </Notice>
       </HeaderArea>
       <Nav
         currentSection={currentSection}
