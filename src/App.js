@@ -45,7 +45,7 @@ class App extends React.Component {
         return -2;
       } else if (days > 0) {
         return -1;
-      } else if (days === 0) {
+      } else if (days > -2) {
         return 0;
       } else {
         return 1;
