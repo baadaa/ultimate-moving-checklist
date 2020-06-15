@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import Nav from "../Nav/Nav";
 import { ReactComponent as HamburgerIcon } from "../../img/hamburger.svg";
@@ -89,6 +89,10 @@ const Notice = styled.div`
   left: 0;
   right: 0;
   padding: 0 15px;
+  transition: opacity 0.2s, transform 0.2s;
+  opacity: ${props => (props.show ? 1 : 0)};
+  pointer-events: ${props => (props.show ? "all" : "none")};
+  transform: ${props => (props.show ? "translateY(0)" : "translateY(-20px)")};
   .notification {
     display: flex;
     box-sizing: border-box;
@@ -159,6 +163,35 @@ const Header = ({
   const sectionLabel = settingIsOpen
     ? "Move Details"
     : getCurrentSection(currentSection);
+  const [toastIsAckowledged, setToastIsAckowledged] = useState(false);
+
+  const toastSeenRecently = () => {
+    const lastSeen = JSON.parse(localStorage.getItem("updToastSeen"));
+    const now = new Date().getTime();
+
+    if (!lastSeen) {
+      return false;
+    }
+    if (now > lastSeen.expiry) {
+      localStorage.removeItem("updToastSeen");
+      return false;
+    }
+    return true;
+  };
+
+  const toastIsSeen = () => {
+    var now = new Date().getTime();
+    var saveToken = {
+      value: now,
+      expiry: now + 259200000
+    };
+    localStorage.setItem("updToastSeen", JSON.stringify(saveToken));
+    setToastIsAckowledged(true);
+  };
+  useEffect(() => {
+    setToastIsAckowledged(toastSeenRecently() ? true : false);
+  }, []);
+
   return (
     <>
       <HeaderArea>
@@ -186,7 +219,7 @@ const Header = ({
           </div>
           <button>Close</button>
         </div>
-        <Notice>
+        <Notice show={!toastIsAckowledged}>
           <div
             style={{
               maxWidth: "570px",
@@ -201,7 +234,7 @@ const Header = ({
                 Everything is automatically saved in your browser. Close the tab
                 anytime, and come back to tackle more tasks.
               </p>
-              <button>
+              <button onClick={toastIsSeen}>
                 <Ok /> OK
               </button>
             </div>
