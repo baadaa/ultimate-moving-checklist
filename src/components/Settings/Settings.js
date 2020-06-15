@@ -12,6 +12,8 @@ const SettingsArea = styled.div`
   right: 0;
   bottom: 0;
   background: #fff;
+  padding-left: 15px;
+  padding-right: 15px;
   z-index: 999;
   transition: opacity 0.2s, transform 0.2s;
   border-top: 1px solid #ddd;
@@ -96,6 +98,51 @@ const SettingsArea = styled.div`
       margin-right: 8px;
     }
   }
+  .foot {
+    border-radius: 10px;
+    background: ${colors.navy};
+    color: #fff;
+    padding: 27px;
+    margin-top: 25px;
+    h6 {
+      font-size: 16px;
+      font-weight: 400;
+      margin: 0;
+    }
+    p {
+      font-weight: 200;
+      font-size: 14px;
+      line-height: 1.5;
+      margin: 15px 0 20px;
+      span {
+        text-decoration: underline;
+      }
+    }
+    .buttons {
+      display: flex;
+      justify-content: space-between;
+    }
+    button {
+      flex-basis: 48%;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 40px;
+      padding: 15px;
+      border: none;
+      font-weight: 400;
+      outline: none;
+    }
+    .bookmark {
+      background: #fff;
+      color: ${colors.lightBlue};
+    }
+    .signup {
+      background: ${colors.lightBlue};
+      color: #fff;
+    }
+  }
 `;
 const Settings = ({
   isOpen,
@@ -110,6 +157,35 @@ const Settings = ({
     minDate: "today",
     dateFormat: "M d, Y"
   };
+  const bookmark = () => {
+    // NOTE:
+    // Placeholder solution only — taken from https://stackoverflow.com/questions/10033215/how-do-i-add-an-add-to-favorites-button-or-link-on-my-website
+
+    if (window.sidebar && window.sidebar.addPanel) {
+      // Mozilla Firefox Bookmark
+      window.sidebar.addPanel(document.title, window.location.href, "");
+    } else if (window.external && "AddFavorite" in window.external) {
+      // IE Favorite
+      window.external.AddFavorite(window.location.href, document.title);
+    } else if (window.opera && window.print) {
+      // Opera Hotlist
+      this.title = document.title;
+      return true;
+    } else {
+      // webkit - safari/chrome
+      alert(
+        "Press " +
+          (navigator.userAgent.toLowerCase().indexOf("mac") !== -1
+            ? "Command/Cmd"
+            : "CTRL") +
+          " + D to bookmark this page."
+      );
+    }
+  };
+  const signup = () => {
+    console.log("link to signup page");
+  };
+
   return (
     <SettingsArea isOpen={isOpen}>
       <div className="wrapper">
@@ -185,6 +261,22 @@ const Settings = ({
             <Check /> Save and close
           </button>
         </form>
+      </div>
+      <div className="wrapper foot">
+        <h6>Enjoying the checkist?</h6>
+        <p>
+          Don't forget to <span onClick={bookmark}>bookmark this page</span>,
+          and <span onClick={signup}>sign&nbsp;up for Updater app</span> for
+          more features
+        </p>
+        <div className="buttons">
+          <button className="bookmark" onClick={bookmark}>
+            Bookmark
+          </button>
+          <button className="signup" onClick={signup}>
+            Sign Up
+          </button>
+        </div>
       </div>
     </SettingsArea>
   );
